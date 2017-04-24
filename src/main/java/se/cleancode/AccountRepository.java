@@ -14,7 +14,7 @@ public class AccountRepository {
     public synchronized void save(Event event) {
         List<Event> events = repository.getOrDefault(event.accountId, new ArrayList<>());
         if (events.size() > event.version) {
-            throw new VersionConflicException();
+            throw new ConcurentModificationException();
         }
         events.add(event);
         repository.put(event.accountId, events);

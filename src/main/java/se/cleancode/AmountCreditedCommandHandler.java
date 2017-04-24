@@ -1,7 +1,6 @@
 package se.cleancode;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -12,10 +11,12 @@ public class AmountCreditedCommandHandler {
     @Autowired
     AccountRepository repository;
 
-    public void handle(AmountCreditedCommand command) {
+    public AmountCreditedEvent handle(AmountCreditedCommand command) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyBalance(command);
-        repository.save(toEvent(command, currentVersion));
+        AmountCreditedEvent event = toEvent(command, currentVersion);
+        repository.save(event);
+        return event;
     }
 
     private AmountCreditedEvent toEvent(AmountCreditedCommand command, int currentVersion) {

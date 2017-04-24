@@ -1,7 +1,13 @@
 package se.cleancode;
 
 public class AmountDebitedCommand {
-    public long  amountCredited;
     public String accountId;
+    public long amount;
     public String commandId;
+
+    public AmountDebitedCommand(String accountId, long amount) {
+
+        this.accountId = accountId;
+        this.amount = amount;
+    }
 }
