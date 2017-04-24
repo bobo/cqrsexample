@@ -1,0 +1,40 @@
+[
+    {
+        "namespace": "se.cleancode",
+        "type": "record",
+        "name": "AccountCreated",
+        "fields": [
+            {
+                "name": "eventMetadata",
+                "type": "EventMetadata"
+            },
+            {
+                "name": "accountId",
+                "type": "string"
+            },
+            {
+                "name": "eventId",
+                "type": "String"
+            }
+        ]
+    },
+    {
+        "namespace": "se.cleancode",
+        "type": "record",
+        "name": "AccountCreated",
+        "fields": [
+            {
+                "name": "eventMetadata",
+                "type": "EventMetadata"
+            },
+            {
+                "name": "originator",
+                "type": "string"
+            },
+            {
+                "name": "correlationId",
+                "type": "String"
+            }
+        ]
+    }
+]
