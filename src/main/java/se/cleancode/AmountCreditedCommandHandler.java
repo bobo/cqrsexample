@@ -2,6 +2,7 @@ package se.cleancode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.cleancode.Messaging.MessageLog;
 
 import java.util.UUID;
 
@@ -13,12 +14,16 @@ public class AmountCreditedCommandHandler {
     @Autowired
     AccountRepository repository;
 
+    @Autowired
+    MessageLog messageLog;
+
     public AmountCreditedEvent handle(AmountCreditedCommand command, long delay) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyBalance(command);
         sleep(delay);
         AmountCreditedEvent event = toEvent(command, currentVersion);
         repository.save(event);
+        messageLog.appendMessage(event);
         return event;
     }
 

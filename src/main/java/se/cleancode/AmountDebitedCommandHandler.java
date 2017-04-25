@@ -2,6 +2,7 @@ package se.cleancode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.cleancode.Messaging.MessageLog;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,9 @@ public class AmountDebitedCommandHandler {
     @Autowired
     AccountRepository repository;
 
+    @Autowired
+    MessageLog messageLog;
+
     public AmountDebitedEvent handle(AmountDebitedCommand command, long delay) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyAccountExists(currentVersion);
@@ -21,9 +25,11 @@ public class AmountDebitedCommandHandler {
         sleep(delay);
         AmountDebitedEvent event = toEvent(command, currentVersion);
         repository.save(event);
+        messageLog.appendMessage(event);
         return event;
-
     }
+
+
     public AmountDebitedEvent handle(AmountDebitedCommand command) {
         return handle(command,0);
     }

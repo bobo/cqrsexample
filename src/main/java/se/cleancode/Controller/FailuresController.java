@@ -54,5 +54,15 @@ public class FailuresController {
 
     }
 
+    @RequestMapping("create")
+    public AccountCreatedEvent createAccount() {
+
+        AccountCreatedCommand command = new AccountCreatedCommand(UUID.randomUUID().toString());
+        AccountCreatedEvent event = accountCreatedCommandHandler.handle(command,1);
+        return event;
+
+    }
+
+
 
 }
