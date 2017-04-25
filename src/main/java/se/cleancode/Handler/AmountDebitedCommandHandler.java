@@ -1,13 +1,20 @@
-package se.cleancode;
+package se.cleancode.Handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.cleancode.Command.AmountDebitedCommand;
+import se.cleancode.Event.AmountCreditedEvent;
+import se.cleancode.Event.AmountDebitedEvent;
+import se.cleancode.Event.Event;
+import se.cleancode.Exception.InsufficientBalanceException;
+import se.cleancode.Exception.NoSuchAccountException;
 import se.cleancode.Messaging.MessageLog;
+import se.cleancode.Repository.AccountRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-import static se.cleancode.FailureUtil.sleep;
+import static se.cleancode.Controller.FailureUtil.sleep;
 
 @Service
 public class AmountDebitedCommandHandler {

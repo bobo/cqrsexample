@@ -1,4 +1,4 @@
-package se.cleancode;
+package se.cleancode.Controller;
 
 public class FailureUtil {
 

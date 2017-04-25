@@ -1,12 +1,15 @@
-package se.cleancode;
+package se.cleancode.Handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.cleancode.Command.AmountCreditedCommand;
+import se.cleancode.Repository.AccountRepository;
+import se.cleancode.Event.AmountCreditedEvent;
 import se.cleancode.Messaging.MessageLog;
 
 import java.util.UUID;
 
-import static se.cleancode.FailureUtil.*;
+import static se.cleancode.Controller.FailureUtil.*;
 
 @Service
 public class AmountCreditedCommandHandler {

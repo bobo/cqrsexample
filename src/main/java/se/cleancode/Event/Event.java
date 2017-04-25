@@ -1,4 +1,4 @@
-package se.cleancode;
+package se.cleancode.Event;
 
 public class Event {
 

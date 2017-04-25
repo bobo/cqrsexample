@@ -1,7 +1,7 @@
 package se.cleancode.Messaging;
 
 import org.springframework.stereotype.Component;
-import se.cleancode.Event;
+import se.cleancode.Event.Event;
 
 import java.util.ArrayList;
 import java.util.List;

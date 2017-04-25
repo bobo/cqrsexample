@@ -1,13 +1,14 @@
-package se.cleancode;
+package se.cleancode.Handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import se.cleancode.Command.AccountCreatedCommand;
+import se.cleancode.Exception.AccountAlreadyExistsException;
+import se.cleancode.Event.AccountCreatedEvent;
+import se.cleancode.Repository.AccountRepository;
 import se.cleancode.Messaging.MessageLog;
 
 import java.util.UUID;
-
-import static se.cleancode.FailureUtil.sleep;
 
 @Service
 public class AccountCreatedCommandHandler {

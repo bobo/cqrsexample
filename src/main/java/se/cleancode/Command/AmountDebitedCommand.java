@@ -1,4 +1,4 @@
-package se.cleancode;
+package se.cleancode.Command;
 
 public class AmountDebitedCommand {
     public String accountId;

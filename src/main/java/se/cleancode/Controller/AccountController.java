@@ -5,7 +5,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.cleancode.*;
+import se.cleancode.Aggregate.Account;
+import se.cleancode.Command.*;
+import se.cleancode.Event.AccountCreatedEvent;
+import se.cleancode.Event.AmountCreditedEvent;
+import se.cleancode.Event.AmountDebitedEvent;
+import se.cleancode.Event.Event;
+import se.cleancode.Handler.AccountCreatedCommandHandler;
+import se.cleancode.Handler.AmountCreditedCommandHandler;
+import se.cleancode.Handler.AmountDebitedCommandHandler;
+import se.cleancode.Repository.AccountRepository;
+import se.cleancode.View.AccountView;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +35,7 @@ public class AccountController {
     AmountCreditedCommandHandler amountCreditedCommandHandler;
 
    @Autowired
-    AmountDebitedCommandHandler amountDebitedCommandHandler;
+   AmountDebitedCommandHandler amountDebitedCommandHandler;
 
 
     @Autowired
@@ -66,7 +76,7 @@ public class AccountController {
 
     @RequestMapping("{account-id}/debit")
     public AmountDebitedEvent debitAccount(@PathVariable("account-id") String accountId,
-                                             @RequestBody long amount) {
+                                           @RequestBody long amount) {
 
         AmountDebitedCommand command = new AmountDebitedCommand(accountId,amount);
         return amountDebitedCommandHandler.handle(command);

@@ -5,12 +5,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.cleancode.*;
+import se.cleancode.Command.*;
+import se.cleancode.Event.AccountCreatedEvent;
+import se.cleancode.Event.AmountCreditedEvent;
+import se.cleancode.Event.AmountDebitedEvent;
+import se.cleancode.Handler.AccountCreatedCommandHandler;
+import se.cleancode.Handler.AmountCreditedCommandHandler;
+import se.cleancode.Handler.AmountDebitedCommandHandler;
+import se.cleancode.Repository.AccountRepository;
+import se.cleancode.View.AccountView;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 
@@ -26,7 +32,7 @@ public class FailuresController {
     AmountCreditedCommandHandler amountCreditedCommandHandler;
 
    @Autowired
-    AmountDebitedCommandHandler amountDebitedCommandHandler;
+   AmountDebitedCommandHandler amountDebitedCommandHandler;
 
 
     @Autowired
