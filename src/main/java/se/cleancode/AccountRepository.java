@@ -13,7 +13,7 @@ public class AccountRepository {
 
     public synchronized void save(Event event) {
         List<Event> events = repository.getOrDefault(event.accountId, new ArrayList<>());
-        if (events.size() > event.version) {
+        if (events.size() >= event.version) {
             throw new ConcurentModificationException();
         }
         events.add(event);

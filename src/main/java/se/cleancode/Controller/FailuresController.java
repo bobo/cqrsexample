@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 
 @RestController
@@ -35,12 +36,21 @@ public class FailuresController {
     AccountView view;
 
 
-    @RequestMapping("{account-id}/credit")
+    @RequestMapping(value = "{account-id}/credit", method = POST)
     public AmountCreditedEvent creditAccount(@PathVariable("account-id") String accountId,
                                              @RequestBody long amount) {
 
         AmountCreditedCommand command = new AmountCreditedCommand(accountId,amount);
         return amountCreditedCommandHandler.handle(command, 5000L);
+
+    }
+
+    @RequestMapping(value = "{account-id}/debit", method = POST)
+    public AmountDebitedEvent debitAccount(@PathVariable("account-id") String accountId,
+                                           @RequestBody long amount) {
+
+        AmountDebitedCommand command = new AmountDebitedCommand(accountId,amount);
+        return amountDebitedCommandHandler.handle(command,5000L);
 
     }
 
