@@ -1,0 +1,13 @@
+spring:
+ profiles:
+   active: integration
+ jackson:
+   serialization:
+   write-dates-as-timestamps: false
+
+
+management:
+ port: 9080
+
+server:
+ port: 8080
