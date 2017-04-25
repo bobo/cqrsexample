@@ -1,7 +1,7 @@
 package se.cleancode;
 
 public class AmountDebitedEvent extends Event {
-    public static final String EVENT_NAME = "AmountDebitedEvent";
+    public final String eventName = "AmountDebitedEvent";
     public long amount;
 
 }

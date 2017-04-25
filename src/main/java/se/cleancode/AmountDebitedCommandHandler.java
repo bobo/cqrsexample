@@ -6,23 +6,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static se.cleancode.FailureUtil.sleep;
+
 @Service
 public class AmountDebitedCommandHandler {
 
     @Autowired
     AccountRepository repository;
 
-    public AmountDebitedEvent handle(AmountDebitedCommand command) {
+    public AmountDebitedEvent handle(AmountDebitedCommand command, long delay) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyAccountExists(currentVersion);
         verifyBalance(command);
+        sleep(delay);
         AmountDebitedEvent event = toEvent(command, currentVersion);
         repository.save(event);
         return event;
 
     }
+    public AmountDebitedEvent handle(AmountDebitedCommand command) {
+        return handle(command,0);
+    }
 
-    private void verifyAccountExists(int currentVersion) {
+
+        private void verifyAccountExists(int currentVersion) {
         if(currentVersion==0){
             throw new NoSuchAccountException();
         }

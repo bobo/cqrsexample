@@ -10,6 +10,8 @@ import se.cleancode.*;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 
 @RestController
 @RequestMapping(value = "account", produces = "application/json")
@@ -28,6 +30,9 @@ public class AccountController {
 
     @Autowired
     AccountRepository repository;
+
+    @Autowired
+    AccountView view;
 
     @RequestMapping("create")
     public AccountCreatedEvent createAccount() {
@@ -71,6 +76,12 @@ public class AccountController {
     @RequestMapping("{account-id}/list")
     public List<Event> events(@PathVariable("account-id") String accountId) {
         return repository.get(accountId);
+    }
+
+
+    @RequestMapping(value = "{account-id}", method = GET)
+    public Account view(@PathVariable("account-id") String accountId) {
+        return view.getAccount(accountId);
     }
 
 
