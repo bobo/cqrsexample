@@ -2,7 +2,7 @@ package se.cleancode.Handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.cleancode.Command.AmountCreditedCommand;
+import se.cleancode.Command.CreditAmountCommand;
 import se.cleancode.Repository.AccountRepository;
 import se.cleancode.Event.AmountCreditedEvent;
 import se.cleancode.Messaging.MessageLog;
@@ -12,7 +12,7 @@ import java.util.UUID;
 import static se.cleancode.Controller.FailureUtil.*;
 
 @Service
-public class AmountCreditedCommandHandler {
+public class CreditAccountCommandHandler {
 
     @Autowired
     AccountRepository repository;
@@ -20,21 +20,23 @@ public class AmountCreditedCommandHandler {
     @Autowired
     MessageLog messageLog;
 
-    public AmountCreditedEvent handle(AmountCreditedCommand command, long delay) {
+    public AmountCreditedEvent handle(CreditAmountCommand command, long delay) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyBalance(command);
-        sleep(delay);
+        computeThings(delay);
         AmountCreditedEvent event = toEvent(command, currentVersion);
         repository.save(event);
         messageLog.appendMessage(event);
         return event;
     }
 
-    public AmountCreditedEvent handle(AmountCreditedCommand command) {
+
+
+    public AmountCreditedEvent handle(CreditAmountCommand command) {
         return handle(command, 0);
     }
 
-    private AmountCreditedEvent toEvent(AmountCreditedCommand command, int currentVersion) {
+    private AmountCreditedEvent toEvent(CreditAmountCommand command, int currentVersion) {
         AmountCreditedEvent event = new AmountCreditedEvent();
         event.version = currentVersion + 1;
         event.amount = command.amountCredited;
@@ -43,7 +45,11 @@ public class AmountCreditedCommandHandler {
         return event;
     }
 
-    private void verifyBalance(AmountCreditedCommand command) {
+    private void verifyBalance(CreditAmountCommand command) {
 
+    }
+
+    private void computeThings(long delay) {
+        sleep(delay);
     }
 }

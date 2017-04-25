@@ -2,7 +2,7 @@ package se.cleancode.Handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.cleancode.Command.AmountDebitedCommand;
+import se.cleancode.Command.DebitAmountCommand;
 import se.cleancode.Event.AmountCreditedEvent;
 import se.cleancode.Event.AmountDebitedEvent;
 import se.cleancode.Event.Event;
@@ -17,7 +17,7 @@ import java.util.UUID;
 import static se.cleancode.Controller.FailureUtil.sleep;
 
 @Service
-public class AmountDebitedCommandHandler {
+public class DebitAccountCommandHandler {
 
     @Autowired
     AccountRepository repository;
@@ -25,11 +25,11 @@ public class AmountDebitedCommandHandler {
     @Autowired
     MessageLog messageLog;
 
-    public AmountDebitedEvent handle(AmountDebitedCommand command, long delay) {
+    public AmountDebitedEvent handle(DebitAmountCommand command, long delay) {
         int currentVersion = repository.getCurrentVersion(command.accountId);
         verifyAccountExists(currentVersion);
         verifyBalance(command);
-        sleep(delay);
+        computeThings(delay);
         AmountDebitedEvent event = toEvent(command, currentVersion);
         repository.save(event);
         messageLog.appendMessage(event);
@@ -37,18 +37,18 @@ public class AmountDebitedCommandHandler {
     }
 
 
-    public AmountDebitedEvent handle(AmountDebitedCommand command) {
-        return handle(command,0);
+    public AmountDebitedEvent handle(DebitAmountCommand command) {
+        return handle(command, 0);
     }
 
 
-        private void verifyAccountExists(int currentVersion) {
-        if(currentVersion==0){
+    private void verifyAccountExists(int currentVersion) {
+        if (currentVersion == 0) {
             throw new NoSuchAccountException();
         }
     }
 
-    private AmountDebitedEvent toEvent(AmountDebitedCommand command, int currentVersion) {
+    private AmountDebitedEvent toEvent(DebitAmountCommand command, int currentVersion) {
         AmountDebitedEvent event = new AmountDebitedEvent();
         event.version = currentVersion + 1;
         event.amount = command.amount;
@@ -57,22 +57,28 @@ public class AmountDebitedCommandHandler {
         return event;
     }
 
-    private void verifyBalance(AmountDebitedCommand command) {
+    private void verifyBalance(DebitAmountCommand command) {
         List<Event> events = repository.get(command.accountId);
         int currentBalance = getCurrentBalance(events);
-        if(currentBalance<command.amount) {
+        if (currentBalance < command.amount) {
             throw new InsufficientBalanceException();
         }
     }
 
     private int getCurrentBalance(List<Event> events) {
         int currentBalance = 0;
-        for(Event e : events){
+        for (Event e : events) {
             if (e instanceof AmountDebitedEvent) {
                 currentBalance -= ((AmountDebitedEvent) e).amount;
             } else if (e instanceof AmountCreditedEvent) {
                 currentBalance += ((AmountCreditedEvent) e).amount;
             }
-        } return currentBalance;
+        }
+        return currentBalance;
     }
+
+    private void computeThings(long delay) {
+        sleep(delay);
+    }
+
 }

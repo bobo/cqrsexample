@@ -2,13 +2,15 @@ package se.cleancode.Command;
 
 import java.util.UUID;
 
-public class AccountCreatedCommand {
+public class CreditAmountCommand {
+    public long amountCredited;
     public String accountId;
     public String commandId;
 
-
-    public AccountCreatedCommand(String accountId) {
+    public CreditAmountCommand(String accountId, long amountCredited) {
         this.accountId = accountId;
+        this.amountCredited = amountCredited;
         this.commandId = UUID.randomUUID().toString();
+
     }
 }

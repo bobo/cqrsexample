@@ -5,14 +5,21 @@ import se.cleancode.Event.AmountCreditedEvent;
 import se.cleancode.Event.AmountDebitedEvent;
 import se.cleancode.Event.Event;
 
+import java.util.List;
+
 public class Account {
     public String id;
     public long balance;
 
 
-    public void on(Event e) {
+    public static Account fromEvents(List<Event> events){
+        Account account = new Account();
+        events.forEach(account::on);
+        return account;
+    }
 
 
+    private void on(Event e) {
         if(e instanceof AccountCreatedEvent) {
             this.id = e.accountId;
             this.balance = 0;

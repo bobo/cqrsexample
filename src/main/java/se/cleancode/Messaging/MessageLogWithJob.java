@@ -33,30 +33,34 @@ public class MessageLogWithJob {
         List<Event> eventsSince = repository.getEventsSince(lastSentMessage);
         LOG.info("Sending {} messages",eventsSince.size());
         eventsSince.forEach(e -> {
-                if(Math.random() < 0.5) {
-                    appendMessageWithDelay(e);
-                } else {
-                    appendMessage(e);
-                }
-                if(lastSentMessage.isBefore(e.occuredAt)) {
+            sendMessage(e);
+            if(lastSentMessage.isBefore(e.occuredAt)) {
                     lastSentMessage = e.occuredAt;
                 }
         });
     }
 
+    private void sendMessage(Event e) {
+        if(Math.random() < 0.5) {
+            appendMessageWithDelay(e);
+        } else {
+            appendMessage(e);
+        }
+    }
+
     private void appendMessageWithDelay(Event e) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
-        ScheduledFuture<Boolean> job = executor.schedule(sendMessage(e), 10, SECONDS);
+        ScheduledFuture<Boolean> job = executor.schedule(messageSender(e), 10, SECONDS);
         awaitCompletion(job);
     }
 
     private void appendMessage(Event e) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
-        Future<Boolean> job = executor.submit(sendMessage(e));
+        Future<Boolean> job = executor.submit(messageSender(e));
         awaitCompletion(job);
     }
 
-    private Callable<Boolean> sendMessage(Event e) {
+    private Callable<Boolean> messageSender(Event e) {
         return () -> messageLog.add(e);
     }
 

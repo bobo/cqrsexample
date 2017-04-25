@@ -11,9 +11,9 @@ import se.cleancode.Event.AccountCreatedEvent;
 import se.cleancode.Event.AmountCreditedEvent;
 import se.cleancode.Event.AmountDebitedEvent;
 import se.cleancode.Event.Event;
-import se.cleancode.Handler.AccountCreatedCommandHandler;
-import se.cleancode.Handler.AmountCreditedCommandHandler;
-import se.cleancode.Handler.AmountDebitedCommandHandler;
+import se.cleancode.Handler.CreateAccountCommandHandler;
+import se.cleancode.Handler.CreditAccountCommandHandler;
+import se.cleancode.Handler.DebitAccountCommandHandler;
 import se.cleancode.Repository.AccountRepository;
 import se.cleancode.View.AccountView;
 
@@ -29,13 +29,13 @@ public class AccountController {
 
 
     @Autowired
-    AccountCreatedCommandHandler accountCreatedCommandHandler;
+    CreateAccountCommandHandler createAccountCommandHandler;
 
     @Autowired
-    AmountCreditedCommandHandler amountCreditedCommandHandler;
+    CreditAccountCommandHandler creditAccountCommandHandler;
 
    @Autowired
-   AmountDebitedCommandHandler amountDebitedCommandHandler;
+   DebitAccountCommandHandler debitAccountCommandHandler;
 
 
     @Autowired
@@ -47,8 +47,8 @@ public class AccountController {
     @RequestMapping("create")
     public AccountCreatedEvent createAccount() {
 
-        AccountCreatedCommand command = new AccountCreatedCommand(UUID.randomUUID().toString());
-        AccountCreatedEvent event = accountCreatedCommandHandler.handle(command);
+        CreateAccountCommand command = new CreateAccountCommand(UUID.randomUUID().toString());
+        AccountCreatedEvent event = createAccountCommandHandler.handle(command);
         return event;
 
     }
@@ -56,8 +56,8 @@ public class AccountController {
     @RequestMapping("{account-id}/create")
     public AccountCreatedEvent createAccount(@PathVariable("account-id") String accountId) {
 
-        AccountCreatedCommand command = new AccountCreatedCommand(accountId);
-        AccountCreatedEvent event = accountCreatedCommandHandler.handle(command);
+        CreateAccountCommand command = new CreateAccountCommand(accountId);
+        AccountCreatedEvent event = createAccountCommandHandler.handle(command);
         return event;
 
     }
@@ -67,8 +67,8 @@ public class AccountController {
     public AmountCreditedEvent creditAccount(@PathVariable("account-id") String accountId,
                                              @RequestBody long amount) {
 
-        AmountCreditedCommand command = new AmountCreditedCommand(accountId,amount);
-        return amountCreditedCommandHandler.handle(command);
+        CreditAmountCommand command = new CreditAmountCommand(accountId,amount);
+        return creditAccountCommandHandler.handle(command);
 
     }
 
@@ -78,8 +78,8 @@ public class AccountController {
     public AmountDebitedEvent debitAccount(@PathVariable("account-id") String accountId,
                                            @RequestBody long amount) {
 
-        AmountDebitedCommand command = new AmountDebitedCommand(accountId,amount);
-        return amountDebitedCommandHandler.handle(command);
+        DebitAmountCommand command = new DebitAmountCommand(accountId,amount);
+        return debitAccountCommandHandler.handle(command);
 
     }
 
