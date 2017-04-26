@@ -13,16 +13,19 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @Component
 public class MessageLog {
     private static final List<Event> messageLog = new ArrayList<>();
+
+
+
     public void appendMessageWithDelay(Event e) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
         ScheduledFuture<Boolean> job = executor.schedule(sendMessage(e), 10, SECONDS);
-        awaitCompletion(job);
+       // awaitCompletion(job);
     }
 
     public void appendMessage(Event e) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
         Future<Boolean> job = executor.submit(sendMessage(e));
-        awaitCompletion(job);
+      //  awaitCompletion(job);
     }
 
     private Callable<Boolean> sendMessage(Event e) {
