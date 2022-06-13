@@ -1,9 +1,6 @@
 spring:
  profiles:
    active: integration
- jackson:
-   serialization:
-   write-dates-as-timestamps: false
 
 
 management:
